@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fanlun.dao.ScoreDao">
+    <resultMap id="BeanResultMap" type="com.fanlun.bean.Score">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="sno" property="sno" jdbcType="INTEGER"/>
+        <result column="cno" property="cno" jdbcType="INTEGER"/>
+        <result column="tno" property="tno" jdbcType="INTEGER"/>
+        <result column="year" property="year" jdbcType="INTEGER"/>
+        <result column="semester" property="semester" jdbcType="VARCHAR"/>
+        <result column="chapter" property="chapter" jdbcType="INTEGER"/>
+        <result column="grade" property="grade" jdbcType="FLOAT"/>
+    </resultMap>
+
+    <sql id="All_Column">
+        id, sno, cno, tno, year, semester, chapter, grade
+    </sql>
+
+    <select id="getListScore" resultMap="BeanResultMap" parameterType="com.fanlun.bean.Score">
+        SELECT
+        <include refid="All_Column"/>
+        FROM sg
+        <trim prefix="where" prefixOverrides="AND |OR ">
+            <if test="sno != null">
+                AND sno LIKE CONCAT(CONCAT('%',#{sno}),'%')
+            </if>
+            <if test="year != null">
+                AND year = #{year}
+            </if>
+            <if test="semester != null">
+                AND semester LIKE CONCAT(CONCAT('%',#{semester}),'%')
+            </if>
+            <if test="chapter != null">
+                AND chapter = #{chapter}
+            </if>
+            <if test="cno != null">
+                AND cno = #{cno}
+            </if>
+            <if test="tno != null">
+                AND tno = #{tno}
+            </if>
+        </trim>
+    </select>
+
+    <select id="scoreCount" resultType="java.lang.Integer" parameterType="com.fanlun.bean.Score">
+        SELECT count(*) as total FROM sg
+        <trim prefix="where" prefixOverrides="AND |OR ">
+            <if test="sno != null">
+                AND sno LIKE CONCAT(CONCAT('%',#{sno}),'%')
+            </if>
+            <if test="year != null">
+                AND year = #{year}
+            </if>
+            <if test="semester != null">
+                AND semester LIKE CONCAT(CONCAT('%',#{semester}),'%')
+            </if>
+            <if test="chapter != null">
+                AND chapter = #{chapter}
+            </if>
+            <if test="cno != null">
+                AND cno = #{cno}
+            </if>
+            <if test="tno != null">
+                AND tno = #{tno}
+            </if>
+        </trim>
+    </select>
+</mapper>
